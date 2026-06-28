@@ -4,10 +4,11 @@ import { ExternalLink, Github } from "lucide-react";
 import { PROJECTS, TAG_TONE } from "../../lib/data";
 
 export const cardVariants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0, y: 24 },
   show: {
     opacity: 1,
-    transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] },
+    y: 0,
+    transition: { type: "spring", stiffness: 220, damping: 22 },
   },
 };
 
@@ -16,30 +17,47 @@ export const gridVariants = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.04,
-      delayChildren: 0,
+      staggerChildren: 0.06,
+      delayChildren: 0.05,
     },
   },
+};
+
+const visitIconVariants = {
+  initial: { x: 0, y: 0 },
+  hover: { x: 2, y: -2, transition: { type: "spring", stiffness: 400, damping: 15 } }
+};
+
+const githubIconVariants = {
+  initial: { rotate: 0, scale: 1 },
+  hover: { rotate: 15, scale: 1.1, transition: { type: "spring", stiffness: 300, damping: 15 } }
 };
 
 const ProjectCard = ({ project }) => {
   return (
     <motion.article
       variants={cardVariants}
-      whileHover={{ y: -3, transition: { duration: 0.18, ease: "easeOut" } }}
+      whileHover="hover"
+      initial="initial"
+      data-project-title={project.title}
       style={{ willChange: "transform, opacity" }}
-      className="group flex transform-gpu flex-col overflow-hidden rounded-xl border border-bg-elev/60 bg-bg-normal shadow-lg shadow-black/20 transition-colors hover:border-accent-green/40"
+      className="group flex transform-gpu flex-col overflow-hidden rounded-xl border border-bg-elev/60 bg-bg-normal shadow-lg shadow-black/20 transition-all duration-300 hover:border-accent-green/40 hover:shadow-accent-green/5"
     >
       {/* Thumbnail */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-bg-hard">
-        <img
+        <motion.img
+          variants={{
+            initial: { scale: 1 },
+            hover: { scale: 1.04 }
+          }}
+          transition={{ duration: 0.38, ease: "easeOut" }}
           src={project.image}
           alt={project.title}
           width={720}
           height={450}
           decoding="async"
           fetchPriority="high"
-          className="h-full w-full object-cover transition-transform duration-500 will-change-transform group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-500 will-change-transform"
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg-hard/70 via-transparent to-transparent" />
         {project.status === "active" && (
@@ -53,7 +71,7 @@ const ProjectCard = ({ project }) => {
       {/* Body */}
       <div className="flex flex-1 flex-col gap-4 p-5">
         <div className="flex flex-col gap-2">
-          <h3 className="text-base font-semibold tracking-tight text-fg">
+          <h3 className="text-base font-semibold tracking-tight text-fg transition-colors duration-200 group-hover:text-accent-green">
             {project.title}
           </h3>
           <p className="text-xs leading-relaxed text-fg-dim">{project.description}</p>
@@ -76,24 +94,28 @@ const ProjectCard = ({ project }) => {
 
         {/* Actions */}
         <div className="mt-auto flex items-center gap-2 pt-2">
-          <a
+          <motion.a
             href={project.visit}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-1.5 rounded-md bg-fg px-3 py-1.5 text-xs font-medium text-bg-hard transition-colors hover:bg-accent-green"
           >
-            <ExternalLink className="h-3.5 w-3.5" strokeWidth={2} />
-            Visit
-          </a>
-          <a
+            <motion.span variants={visitIconVariants}>
+              <ExternalLink className="h-3.5 w-3.5" strokeWidth={2} />
+            </motion.span>
+            <span>Visit</span>
+          </motion.a>
+          <motion.a
             href={project.github}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-1.5 rounded-md border border-bg-elev/80 px-3 py-1.5 text-xs font-medium text-fg-dim transition-colors hover:border-accent-green/60 hover:text-fg"
           >
-            <Github className="h-3.5 w-3.5" strokeWidth={2} />
-            GitHub
-          </a>
+            <motion.span variants={githubIconVariants}>
+              <Github className="h-3.5 w-3.5" strokeWidth={2} />
+            </motion.span>
+            <span>GitHub</span>
+          </motion.a>
         </div>
       </div>
     </motion.article>
@@ -141,3 +163,4 @@ export const ProjectsContent = () => {
     </div>
   );
 };
+export default ProjectsContent;

@@ -3,11 +3,36 @@ import { motion } from "framer-motion";
 import { useTypewriter } from "../../hooks/use-typewriter";
 import { ROLES } from "../../lib/data";
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const childVariants = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 200, damping: 22 },
+  },
+};
+
 export const HomeContent = () => {
   const typed = useTypewriter(ROLES);
 
   return (
-    <div className="relative isolate">
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="relative isolate"
+    >
       {/* Soft Gruvbox green/aqua glow in the top-left */}
       <div
         aria-hidden
@@ -29,9 +54,7 @@ export const HomeContent = () => {
       <div className="mx-auto flex min-h-full max-w-5xl flex-col items-start gap-8 px-6 py-14 md:px-12 md:py-20">
         {/* Status line */}
         <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.05 }}
+          variants={childVariants}
           className="flex items-center gap-2 text-xs text-fg-muted"
         >
           <span className="h-1.5 w-1.5 animate-pulse-glow rounded-full bg-accent-green" />
@@ -40,9 +63,7 @@ export const HomeContent = () => {
 
         {/* Intro */}
         <motion.h1
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          variants={childVariants}
           className="text-4xl font-semibold leading-[1.05] tracking-tight text-fg md:text-6xl"
         >
           <span className="text-fg-dim">Hi, I&apos;m</span>{" "}
@@ -51,9 +72,7 @@ export const HomeContent = () => {
 
         {/* Typewriter role */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          variants={childVariants}
           className="flex w-full items-baseline gap-3 whitespace-nowrap"
         >
           <span className="text-xl text-fg-dim md:text-2xl">a</span>
@@ -82,9 +101,7 @@ export const HomeContent = () => {
 
         {/* Subtle prompt line */}
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.45 }}
+          variants={childVariants}
           className="max-w-2xl text-sm leading-relaxed text-fg-dim md:text-base"
         >
           <span className="text-fg-muted">{">"}</span> I design and ship end-to-end
@@ -95,6 +112,7 @@ export const HomeContent = () => {
           <span className="text-accent-green">web3</span>.
         </motion.p>
       </div>
-    </div>
+    </motion.div>
   );
 };
+export default HomeContent;

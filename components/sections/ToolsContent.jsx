@@ -1,7 +1,21 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { TOOLS, TONE_BG } from "../../lib/data";
 import { cardVariants, gridVariants } from "./ProjectsContent";
+
+const logoHoverVariants = {
+  initial: { scale: 1, rotate: 0 },
+  hover: { scale: 1.1, rotate: 6, transition: { type: "spring", stiffness: 350, damping: 15 } }
+};
+
+const cardHoverVariants = {
+  initial: { scale: 1, y: 0 },
+  hover: { 
+    scale: 1.02, 
+    y: -3, 
+    transition: { type: "spring", stiffness: 300, damping: 20 } 
+  }
+};
 
 const ToolLogo = ({ tool }) => {
   if (tool.icon) {
@@ -58,23 +72,81 @@ const ToolLogo = ({ tool }) => {
 };
 
 const ToolCard = ({ tool }) => {
+  // Map specific tool border highlights on hover
+  const hoverBorders = {
+    red: "hover:border-gruv-red/50 hover:shadow-gruv-red/5",
+    orange: "hover:border-gruv-orange/50 hover:shadow-gruv-orange/5",
+    yellow: "hover:border-accent-yellow/50 hover:shadow-accent-yellow/5",
+    green: "hover:border-accent-green/50 hover:shadow-accent-green/5",
+    aqua: "hover:border-gruv-aqua/50 hover:shadow-gruv-aqua/5",
+    blue: "hover:border-accent-blue/50 hover:shadow-accent-blue/5",
+    purple: "hover:border-gruv-purple/50 hover:shadow-gruv-purple/5",
+  };
+  const hoverClass = hoverBorders[tool.tone] || "hover:border-accent-green/30 hover:shadow-accent-green/5";
+
+  // 3D Tilt logic values
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  // Map mouse positions to rotations (tilt toward cursor)
+  const rotateX = useTransform(y, [-0.5, 0.5], [20, -20]);
+  const rotateY = useTransform(x, [-0.5, 0.5], [20, -20]);
+
+  // Dampen coordinates with springs for fluid motion
+  const springRotateX = useSpring(rotateX, { stiffness: 250, damping: 20 });
+  const springRotateY = useSpring(rotateY, { stiffness: 250, damping: 20 });
+
+  const handleMouseMove = (e) => {
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+
+    const relativeX = (e.clientX - rect.left) / rect.width - 0.5;
+    const relativeY = (e.clientY - rect.top) / rect.height - 0.5;
+
+    x.set(relativeX);
+    y.set(relativeY);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   return (
-    <motion.div
-      variants={cardVariants}
-      whileHover={{
-        scale: 1.02,
-        transition: { duration: 0.18, ease: "easeOut" },
-      }}
-      className="group flex items-center gap-4 rounded-xl border border-bg-elev/40 bg-bg-hard/60 p-4 transition-colors hover:border-accent-green/40 hover:bg-bg-hard"
-    >
-      <ToolLogo tool={tool} />
-      <div className="min-w-0 flex-1">
-        <div className="truncate text-sm font-semibold tracking-tight text-fg">
-          {tool.name}
+    <div style={{ perspective: 1000 }}>
+      <motion.div
+        variants={cardVariants}
+        whileHover="hover"
+        initial="initial"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          rotateX: springRotateX,
+          rotateY: springRotateY,
+          transformStyle: "preserve-3d",
+        }}
+        className={[
+          "group flex items-center gap-4 rounded-xl border border-bg-elev/40 bg-bg-hard/60 p-4 transition-all duration-300 hover:bg-bg-hard hover:shadow-lg",
+          hoverClass
+        ].join(" ")}
+      >
+        <motion.div 
+          variants={logoHoverVariants}
+          style={{ transformStyle: "preserve-3d", translateZ: 30 }}
+        >
+          <ToolLogo tool={tool} />
+        </motion.div>
+        <div 
+          className="min-w-0 flex-1"
+          style={{ transformStyle: "preserve-3d", translateZ: 15 }}
+        >
+          <div className="truncate text-sm font-semibold tracking-tight text-fg transition-colors duration-200 group-hover:text-fg">
+            {tool.name}
+          </div>
+          <div className="truncate text-[11px] text-fg-muted">{tool.category}</div>
         </div>
-        <div className="truncate text-[11px] text-fg-muted">{tool.category}</div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 };
 
@@ -117,3 +189,4 @@ export const ToolsContent = () => {
     </div>
   );
 };
+export default ToolsContent;

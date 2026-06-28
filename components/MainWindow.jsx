@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { WindowChrome } from "./WindowChrome";
 import { ComingSoon } from "./ComingSoon";
@@ -11,6 +11,16 @@ import { ContactContent } from "./sections/ContactContent";
 import { PROJECTS } from "../lib/data";
 
 export const MainWindow = ({ activeView }) => {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    // Reset scroll position to top when activeView changes
+    const scrollContainer = containerRef.current?.querySelector(".overflow-y-auto");
+    if (scrollContainer) {
+      scrollContainer.scrollTop = 0;
+    }
+  }, [activeView]);
+
   const renderContent = () => {
     switch (activeView) {
       case "projects":
@@ -32,23 +42,26 @@ export const MainWindow = ({ activeView }) => {
 
   return (
     <motion.main
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      initial={{ opacity: 0, scale: 0.98, y: 12 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 200, damping: 22 }}
       className="md:ml-[260px] min-h-screen p-4 md:p-6"
     >
-      <div className="relative h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] overflow-hidden rounded-2xl border border-bg-elev/60 bg-bg-normal shadow-2xl shadow-black/40">
+      <div 
+        ref={containerRef}
+        className="relative h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] overflow-hidden rounded-2xl border border-bg-elev/60 bg-bg-normal shadow-2xl shadow-black/40"
+      >
         <WindowChrome />
 
-        {/* Scrollable area */}
-        <div className="scrollbar-thin h-[calc(100%-2.75rem)] overflow-y-auto">
+        {/* Scrollable content area */}
+        <div className="scrollbar-thin relative z-10 h-[calc(100%-2.75rem)] overflow-y-auto">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={activeView}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.12, ease: "linear" }}
+              initial={{ opacity: 0, x: 12, filter: "blur(4px)" }}
+              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, x: -12, filter: "blur(4px)" }}
+              transition={{ type: "spring", stiffness: 350, damping: 28 }}
             >
               {renderContent()}
             </motion.div>
