@@ -1,16 +1,18 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Mail, Twitter, Play } from "lucide-react";
+import { Mail, Linkedin, Play, Phone } from "lucide-react";
 
 const quickCardVariants = {
   hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 200, damping: 20 } }
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 200, damping: 20 } },
 };
 
 const QuickCard = ({ Icon, label, value, href }) => {
+  const isExternal = href.startsWith("http");
   return (
     <motion.a
       href={href}
+      {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       variants={quickCardVariants}
       whileHover={{ y: -3, scale: 1.01 }}
       transition={{ type: "spring", stiffness: 350, damping: 15 }}
@@ -32,10 +34,10 @@ const QuickCard = ({ Icon, label, value, href }) => {
 
 const FieldInput = ({ id, label, type = "text", ...rest }) => {
   return (
-    <motion.div 
+    <motion.div
       variants={{
         hidden: { opacity: 0, x: -8 },
-        show: { opacity: 1, x: 0 }
+        show: { opacity: 1, x: 0 },
       }}
       className="relative"
     >
@@ -100,21 +102,30 @@ export const ContactContent = () => {
           animate="show"
           variants={{
             hidden: { opacity: 0 },
-            show: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.1 } }
+            show: {
+              opacity: 1,
+              transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+            },
           }}
-          className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+          className="grid grid-cols-1 gap-3 sm:grid-cols-3"
         >
           <QuickCard
             Icon={Mail}
             label="Email"
-            value="hello@viratk.ai"
-            href="mailto:hello@viratk.ai"
+            value="dionovan7@gmail.com"
+            href="mailto:dionovan7@gmail.com"
           />
           <QuickCard
-            Icon={Twitter}
-            label="Twitter"
-            value="@viratk"
-            href="https://twitter.com/viratk"
+            Icon={Linkedin}
+            label="LinkedIn"
+            value="dionovan-ramadhani"
+            href="https://www.linkedin.com/in/dionovan-ramadhani/"
+          />
+          <QuickCard
+            Icon={Phone}
+            label="WhatsApp"
+            value="085156427188"
+            href="https://wa.me/6285156427188"
           />
         </motion.div>
 
@@ -125,17 +136,17 @@ export const ContactContent = () => {
           animate="show"
           variants={{
             hidden: { opacity: 0, y: 20 },
-            show: { 
-              opacity: 1, 
+            show: {
+              opacity: 1,
               y: 0,
-              transition: { 
-                type: "spring", 
-                stiffness: 150, 
-                damping: 20, 
-                staggerChildren: 0.05, 
-                delayChildren: 0.2 
-              } 
-            }
+              transition: {
+                type: "spring",
+                stiffness: 150,
+                damping: 20,
+                staggerChildren: 0.05,
+                delayChildren: 0.2,
+              },
+            },
           }}
           className="relative overflow-hidden rounded-2xl border border-bg-elev/60 bg-bg-normal/60 p-5 md:p-7"
         >
@@ -164,7 +175,7 @@ export const ContactContent = () => {
             <motion.div
               variants={{
                 hidden: { opacity: 0, x: -8 },
-                show: { opacity: 1, x: 0 }
+                show: { opacity: 1, x: 0 },
               }}
               className="relative"
             >
@@ -181,10 +192,10 @@ export const ContactContent = () => {
               />
             </motion.div>
 
-            <motion.div 
+            <motion.div
               variants={{
                 hidden: { opacity: 0, y: 8 },
-                show: { opacity: 1, y: 0 }
+                show: { opacity: 1, y: 0 },
               }}
               className="pt-1"
             >
@@ -203,16 +214,6 @@ export const ContactContent = () => {
             </motion.div>
           </div>
         </motion.form>
-
-        {/* Footer helper */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.45 }}
-          className="text-center text-xs text-fg-muted"
-        >
-          Prefer to schedule a call? <span className="text-fg-dim">9005-123-456</span>
-        </motion.div>
       </div>
     </div>
   );

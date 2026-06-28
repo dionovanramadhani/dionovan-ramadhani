@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useTypewriter } from "../../hooks/use-typewriter";
 import { ROLES } from "../../lib/data";
+import { ArrowRight, Mail } from "lucide-react";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -23,7 +24,7 @@ const childVariants = {
   },
 };
 
-export const HomeContent = () => {
+export const HomeContent = ({ onSelect }) => {
   const typed = useTypewriter(ROLES);
 
   return (
@@ -102,15 +103,53 @@ export const HomeContent = () => {
         {/* Subtle prompt line */}
         <motion.p
           variants={childVariants}
-          className="max-w-2xl text-sm leading-relaxed text-fg-dim md:text-base"
+          className="w-full text-sm leading-relaxed text-fg-dim md:text-base"
         >
-          <span className="text-fg-muted">{">"}</span> I design and ship end-to-end
-          products — from pixel-perfect interfaces to scalable services and on-chain
-          logic. Currently exploring the intersection of{" "}
-          <span className="text-accent-blue">AI</span>,{" "}
-          <span className="text-accent-yellow">DX</span> and{" "}
-          <span className="text-accent-green">web3</span>.
+          <span className="text-fg-muted">{">"}</span>{" "}
+          <span className="text-accent-blue">Full-Stack Web</span> &{" "}
+          <span className="text-accent-green">Blockchain Developer</span> with 2
+          years of experience in{" "}
+          <span className="text-accent-yellow">JavaScript</span> /{" "}
+          <span className="text-accent-blue">TypeScript</span>. Builds scalable
+          backends (
+          <span className="text-accent-green">Node.js</span>,{" "}
+          <span className="text-accent-blue">PostgreSQL</span>,{" "}
+          <span className="text-accent-green">MongoDB</span>), modern frontends (
+          <span className="text-accent-blue">React</span>,{" "}
+          <span className="text-orange-400">Next.js</span>), and{" "}
+          <span className="text-blue-300">smart contracts</span> (
+          <span className="text-accent-yellow">Solidity</span>) — with a strong
+          background in game development.
         </motion.p>
+
+        {/* CTA Buttons */}
+        <motion.div
+          variants={childVariants}
+          className="flex flex-wrap items-center gap-3 pt-2"
+        >
+          <motion.button
+            whileHover={{ scale: 1.04, x: 2 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => onSelect?.("projects")}
+            className="group flex items-center gap-2 rounded-md bg-fg px-5 py-2.5 text-sm font-semibold text-bg-hard transition-colors hover:bg-accent-green cursor-pointer"
+          >
+            View My Work
+            <ArrowRight
+              className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
+              strokeWidth={2.25}
+            />
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => onSelect?.("contact")}
+            className="flex items-center gap-2 rounded-md border border-bg-elev/80 px-5 py-2.5 text-sm font-medium text-fg-dim transition-colors hover:border-accent-green/60 hover:text-fg cursor-pointer"
+          >
+            <Mail className="h-4 w-4" strokeWidth={1.75} />
+            Get in Touch
+          </motion.button>
+        </motion.div>
       </div>
     </motion.div>
   );

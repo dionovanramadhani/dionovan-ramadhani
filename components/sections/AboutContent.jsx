@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Mail } from "lucide-react";
+import { Mail, Download } from "lucide-react";
 import { ABOUT_TAGS, ABOUT_STACK, ABOUT_SECTIONS } from "../../lib/data";
 
 const SectionHeader = ({ title }) => {
@@ -16,7 +16,7 @@ const SectionHeader = ({ title }) => {
   );
 };
 
-export const AboutContent = () => {
+export const AboutContent = ({ onClickGetInTouch }) => {
   return (
     <div className="relative isolate">
       {/* Soft glow */}
@@ -29,7 +29,7 @@ export const AboutContent = () => {
         }}
       />
 
-      <div className="mx-auto flex max-w-3xl flex-col gap-10 px-6 py-14 md:px-10 md:py-16">
+      <div className="mx-auto flex max-w-4xl flex-col gap-10 px-6 py-14 md:px-10 md:py-16">
         {/* Hero name */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -37,7 +37,7 @@ export const AboutContent = () => {
           transition={{ type: "spring", stiffness: 180, damping: 20 }}
           className="text-6xl font-semibold leading-none tracking-tight text-fg md:text-7xl"
         >
-          Virat
+          Dionovan Ramadhani
         </motion.h1>
 
         {/* Bullet-separated tags */}
@@ -65,8 +65,8 @@ export const AboutContent = () => {
             hidden: { opacity: 0 },
             show: {
               opacity: 1,
-              transition: { staggerChildren: 0.04, delayChildren: 0.2 }
-            }
+              transition: { staggerChildren: 0.04, delayChildren: 0.2 },
+            },
           }}
           className="-mt-4 flex flex-wrap gap-2"
         >
@@ -75,9 +75,13 @@ export const AboutContent = () => {
               key={s}
               variants={{
                 hidden: { opacity: 0, scale: 0.8 },
-                show: { opacity: 1, scale: 1 }
+                show: { opacity: 1, scale: 1 },
               }}
-              whileHover={{ scale: 1.06, rotate: 1, borderColor: "rgba(142,192,124,0.4)" }}
+              whileHover={{
+                scale: 1.06,
+                rotate: 1,
+                borderColor: "rgba(142,192,124,0.4)",
+              }}
               transition={{ type: "spring", stiffness: 400, damping: 15 }}
               className="inline-flex items-center rounded-full border border-bg-elev/70 bg-bg-hard px-3 py-1 text-[12px] text-fg-dim cursor-default transition-all duration-200 hover:text-fg"
             >
@@ -94,7 +98,12 @@ export const AboutContent = () => {
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ type: "spring", stiffness: 120, damping: 18, delay: i * 0.04 }}
+              transition={{
+                type: "spring",
+                stiffness: 120,
+                damping: 18,
+                delay: i * 0.04,
+              }}
               className="flex flex-col gap-3"
             >
               <SectionHeader title={s.title} />
@@ -113,18 +122,18 @@ export const AboutContent = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-6 flex flex-wrap items-center gap-3"
         >
-          <motion.a
+          <motion.div
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            href="#contact"
-            className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 text-sm font-medium text-bg-hard transition-colors hover:bg-accent-green"
+            className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 text-sm font-medium text-bg-hard transition-colors hover:bg-accent-green cursor-pointer"
+            onClick={onClickGetInTouch}
           >
             Get in Touch
-          </motion.a>
+          </motion.div>
           <motion.a
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            href="mailto:hello@example.com"
+            href="mailto:dionovan7@gmail.com"
             className="inline-flex items-center gap-2 rounded-md border border-bg-elev/80 px-4 py-2 text-sm font-medium text-fg-dim transition-colors hover:border-accent-green/60 hover:text-fg"
           >
             <Mail className="h-4 w-4" strokeWidth={2} />

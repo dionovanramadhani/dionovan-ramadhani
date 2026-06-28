@@ -1,7 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Hexagon } from "lucide-react";
-import { navItems, socials } from "../lib/data";
+import { navItems, ROLES, socials } from "../lib/data";
+import Image from "next/image";
+import { Logo } from "../lib/images/index";
+import { useTypewriter } from "@/hooks/use-typewriter";
+import { Download } from "lucide-react";
 
 const sidebarVariants = {
   hidden: { x: -20, opacity: 0 },
@@ -19,10 +22,16 @@ const sidebarVariants = {
 
 const childVariants = {
   hidden: { y: 10, opacity: 0 },
-  show: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 25 } },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: { type: "spring", stiffness: 300, damping: 25 },
+  },
 };
 
 export const Sidebar = ({ activeView, onSelect }) => {
+  const type = useTypewriter(ROLES);
+
   return (
     <motion.aside
       variants={sidebarVariants}
@@ -33,17 +42,17 @@ export const Sidebar = ({ activeView, onSelect }) => {
       {/* Identity */}
       <div className="flex flex-col gap-8">
         <motion.div variants={childVariants} className="flex items-center gap-3">
-          <motion.div 
+          <motion.div
             whileHover={{ scale: 1.05, rotate: 10 }}
-            className="flex h-10 w-10 items-center justify-center rounded-md bg-bg-normal ring-1 ring-bg-elev/60 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center cursor-pointer"
           >
-            <Hexagon className="h-5 w-5 text-accent-blue" strokeWidth={1.75} />
+            <Image src={Logo} alt="logo-icon" loading="eager" className="w-full" />
           </motion.div>
           <div className="leading-tight">
             <div className="text-[15px] font-semibold tracking-tight text-fg">
-              Your Name
+              Dionovan Ramadhani
             </div>
-            <div className="text-xs text-fg-muted">Portfolio</div>
+            <div className="text-xs text-fg-muted">{type}</div>
           </div>
         </motion.div>
 
@@ -70,12 +79,12 @@ export const Sidebar = ({ activeView, onSelect }) => {
                   />
                 )}
                 <span className="relative z-10 flex items-center gap-3">
-                  <Icon 
+                  <Icon
                     className={[
                       "h-4 w-4 transition-transform duration-200 group-hover:scale-110",
-                      isActive ? "text-accent-blue" : ""
-                    ].join(" ")} 
-                    strokeWidth={1.75} 
+                      isActive ? "text-accent-blue" : "",
+                    ].join(" ")}
+                    strokeWidth={1.75}
                   />
                   <span>{item.label}</span>
                 </span>
@@ -88,7 +97,10 @@ export const Sidebar = ({ activeView, onSelect }) => {
       {/* Connect + Footer */}
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <motion.div variants={childVariants} className="px-3 text-[11px] uppercase tracking-[0.18em] text-fg-muted">
+          <motion.div
+            variants={childVariants}
+            className="px-3 text-[11px] uppercase tracking-[0.18em] text-fg-muted"
+          >
             Connect
           </motion.div>
           <div className="flex flex-col">
@@ -112,9 +124,28 @@ export const Sidebar = ({ activeView, onSelect }) => {
           </div>
         </div>
 
-        <motion.div variants={childVariants} className="border-t border-bg-elev/40 pt-4 text-[11px] text-fg-muted">
-          Made with <span className="text-gruv-red">♥</span> · ©{" "}
-          {new Date().getFullYear()}
+        <motion.a
+          variants={childVariants}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          href="/cv/Dionovan Ramadhani-resume_25_04_2026-3.pdf"
+          download="Dionovan Ramadhani - Resume.pdf"
+          className="mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-fg px-3 py-2 text-xs font-semibold text-bg-hard transition-colors hover:bg-accent-green cursor-pointer font-mono"
+        >
+          <Download className="h-3.5 w-3.5" strokeWidth={2.25} />
+          <span>Download CV</span>
+        </motion.a>
+
+        <motion.div
+          variants={childVariants}
+          className="border-t border-bg-elev/40 pt-4 text-[11px] text-fg-muted"
+        >
+          <div className="text-[11px] font-semibold text-fg-dim tracking-wide">
+            © {new Date().getFullYear()} Dionovan Ramadhani
+          </div>
+          <div className="text-[10px] text-fg-muted/50 tracking-widest uppercase">
+            All rights reserved
+          </div>
         </motion.div>
       </div>
     </motion.aside>

@@ -3,6 +3,8 @@ import { motion, useScroll } from "framer-motion";
 import { Calendar, Trophy, Flame } from "lucide-react";
 import { CATEGORY_TONE, TIMELINE, ACHIEVEMENTS, SPECIALIZATIONS } from "../../lib/data";
 import { cardVariants, gridVariants } from "./ProjectsContent";
+import Image from "next/image";
+import Link from "next/link";
 
 const experienceCardHoverVariants = {
   initial: { x: 0, y: 0, scale: 1 },
@@ -10,18 +12,22 @@ const experienceCardHoverVariants = {
     x: 4,
     y: -2,
     scale: 1.015,
-    transition: { type: "spring", stiffness: 300, damping: 20 }
-  }
+    transition: { type: "spring", stiffness: 300, damping: 20 },
+  },
 };
 
 const iconHoverVariants = {
   initial: { scale: 1, rotate: 0 },
-  hover: { scale: 1.15, rotate: 8, transition: { type: "spring", stiffness: 400, damping: 15 } }
+  hover: {
+    scale: 1.15,
+    rotate: 8,
+    transition: { type: "spring", stiffness: 400, damping: 15 },
+  },
 };
 
 const bulletHoverVariants = {
   initial: { scale: 1 },
-  hover: { scale: 1.3, transition: { type: "spring", stiffness: 300, damping: 10 } }
+  hover: { scale: 1.3, transition: { type: "spring", stiffness: 300, damping: 10 } },
 };
 
 const TimelineItem = ({ item, containerRef }) => {
@@ -42,9 +48,12 @@ const TimelineItem = ({ item, containerRef }) => {
     current: "hover:border-accent-blue/40 hover:shadow-accent-blue/5 hover:bg-bg-normal",
     ai: "hover:border-gruv-purple/40 hover:shadow-gruv-purple/5 hover:bg-bg-normal",
     growth: "hover:border-accent-green/40 hover:shadow-accent-green/5 hover:bg-bg-normal",
-    early: "hover:border-accent-yellow/40 hover:shadow-accent-yellow/5 hover:bg-bg-normal",
+    early:
+      "hover:border-accent-yellow/40 hover:shadow-accent-yellow/5 hover:bg-bg-normal",
   };
-  const hoverClass = hoverBorders[item.category] || "hover:border-accent-green/30 hover:shadow-accent-green/5 hover:bg-bg-normal";
+  const hoverClass =
+    hoverBorders[item.category] ||
+    "hover:border-accent-green/30 hover:shadow-accent-green/5 hover:bg-bg-normal";
 
   return (
     <motion.div
@@ -53,23 +62,23 @@ const TimelineItem = ({ item, containerRef }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
-      className="pb-48 md:pb-72"
+      className="pb-10 md:pb-48"
     >
       <div className="bg-bg-normal pt-4 md:pt-6">
-        <div className="relative grid grid-cols-[7rem_auto_1fr] gap-x-5 md:grid-cols-[10rem_auto_1fr] md:gap-x-8">
+        <div className="relative grid grid-cols-1 gap-y-4 md:grid-cols-[10rem_auto_1fr] md:gap-x-8">
           {/* Left — period */}
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.1 }}
-            className="sticky top-4 self-start pt-2 text-right"
+            className="sticky top-4 self-start pt-2 text-right hidden md:block"
           >
             <div className="text-xs text-fg-muted md:text-sm">{item.period}</div>
           </motion.div>
 
           {/* Center — node + line */}
-          <div className="relative flex w-10 justify-center md:w-12">
+          <div className="relative hidden md:flex w-12 justify-center">
             <div className="absolute left-1/2 top-0 -translate-x-1/2 -bottom-56 md:-bottom-80 w-px bg-bg-elev overflow-hidden">
               <motion.div
                 className={["w-full origin-top h-full", tone.bg].join(" ")}
@@ -82,15 +91,12 @@ const TimelineItem = ({ item, containerRef }) => {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ type: "spring", stiffness: 260, damping: 15, delay: 0.1 }}
               className={[
-                "sticky top-4 z-10 mt-0 flex h-9 w-9 items-center justify-center rounded-full ring-2 md:h-10 md:w-10",
+                "sticky top-4 z-10 mt-0 flex h-9 w-9 items-center justify-center ring-2 md:h-12 md:w-12 p-3 rounded-md",
                 "bg-bg-hard",
                 tone.ring,
               ].join(" ")}
             >
-              <Icon
-                className={["h-4 w-4 md:h-[18px] md:w-[18px]", tone.text].join(" ")}
-                strokeWidth={1.75}
-              />
+              <Image src={item.icon} alt="company-logo" loading="eager" />
               <motion.span
                 animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
                 transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
@@ -115,21 +121,30 @@ const TimelineItem = ({ item, containerRef }) => {
               variants={experienceCardHoverVariants}
               className={[
                 "rounded-xl border border-bg-elev/60 bg-bg-normal/70 p-5 shadow-lg shadow-black/15 transition-all duration-300 hover:shadow-xl",
-                hoverClass
+                hoverClass,
               ].join(" ")}
             >
               <div className="mb-3 flex items-start gap-3">
                 <motion.div
                   variants={iconHoverVariants}
                   className={[
-                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ring-1",
-                    tone.soft,
-                    tone.ring,
+                    "flex h-9 w-9 shrink-0 items-center justify-center",
+                    // tone.soft,
+                    // tone.ring,
                   ].join(" ")}
                 >
-                  <Icon className={["h-4 w-4", tone.text].join(" ")} strokeWidth={2} />
+                  {/* <Icon className={["h-4 w-4", tone.text].join(" ")} strokeWidth={2} /> */}
+                  <Image
+                    src={item.icon}
+                    alt="icon-company"
+                    loading="eager"
+                    className="w-full"
+                  />
                 </motion.div>
                 <div className="min-w-0 flex-1">
+                  <span className="text-[11px] font-mono text-fg-muted block md:hidden mb-1">
+                    {item.period}
+                  </span>
                   <h3 className="text-sm font-semibold tracking-tight text-fg md:text-base">
                     {item.role}
                     {item.company && (
@@ -186,6 +201,7 @@ const KeyAchievements = ({ containerRef }) => {
     blue: "text-accent-blue",
     yellow: "text-accent-yellow",
     purple: "text-gruv-purple",
+    orange: "text-gruv-orange",
   };
 
   const itemRef = useRef(null);
@@ -204,23 +220,23 @@ const KeyAchievements = ({ containerRef }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
-      className="pb-48 md:pb-72"
+      className="pb-10 md:pb-48"
     >
       <div className="bg-bg-normal pt-4 md:pt-6">
-        <div className="relative grid grid-cols-[7rem_auto_1fr] gap-x-5 md:grid-cols-[10rem_auto_1fr] md:gap-x-8">
+        <div className="relative grid grid-cols-1 gap-y-4 md:grid-cols-[10rem_auto_1fr] md:gap-x-8">
           {/* Left */}
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.1 }}
-            className="sticky top-2 self-start pt-2 text-right"
+            className="sticky top-2 self-start pt-2 text-right hidden md:block"
           >
             <div className="text-xs text-fg-muted md:text-sm">Key Achievements</div>
           </motion.div>
 
           {/* Node */}
-          <div className="relative flex w-10 justify-center md:w-12">
+          <div className="relative hidden md:flex w-12 justify-center">
             <div className="absolute left-1/2 -top-4 md:-top-6 -translate-x-1/2 h-[38px] md:h-[48px] w-px bg-bg-elev overflow-hidden">
               <motion.div
                 className="w-full origin-top h-full bg-accent-green"
@@ -269,28 +285,43 @@ const KeyAchievements = ({ containerRef }) => {
                 </div>
               </div>
 
-              <div className="mb-5 grid grid-cols-2 gap-3">
-                {ACHIEVEMENTS.map((a) => (
-                  <motion.div
-                    key={a.label}
-                    whileHover={{ scale: 1.03, y: -2 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                    className="rounded-lg border border-bg-elev/50 bg-bg-hard/60 p-4 transition-colors hover:border-accent-green/20"
-                  >
-                    <div
+              <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {ACHIEVEMENTS.map((a) => {
+                  const Wrapper = a.link ? motion(Link) : motion.div;
+                  const wrapperProps = a.link
+                    ? {
+                        href: a.link,
+                        ...(a.link.startsWith("http")
+                          ? { target: "_blank", rel: "noopener noreferrer" }
+                          : {}),
+                      }
+                    : {};
+                  return (
+                    <Wrapper
+                      key={a.label}
+                      {...wrapperProps}
+                      whileHover={{ scale: 1.03, y: -2 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
                       className={[
-                        "text-[11px] uppercase tracking-wider",
-                        accentMap[a.accent],
+                        "rounded-lg border border-bg-elev/50 bg-bg-hard/60 p-4 transition-colors hover:border-accent-green/20",
+                        a.link ? "cursor-pointer" : "",
                       ].join(" ")}
                     >
-                      {a.label}
-                    </div>
-                    <div className="mt-1 text-2xl font-semibold tracking-tight text-fg">
-                      {a.value}
-                    </div>
-                    <div className="mt-0.5 text-[11px] text-fg-muted">{a.sub}</div>
-                  </motion.div>
-                ))}
+                      <div
+                        className={[
+                          "text-[11px] uppercase tracking-wider",
+                          accentMap[a.accent],
+                        ].join(" ")}
+                      >
+                        {a.label}
+                      </div>
+                      <div className="mt-1 text-2xl font-semibold tracking-tight text-fg">
+                        {a.value}
+                      </div>
+                      <div className="mt-0.5 text-[11px] text-fg-muted">{a.sub}</div>
+                    </Wrapper>
+                  );
+                })}
               </div>
 
               <div>
@@ -350,8 +381,8 @@ export const ExperienceContent = () => {
             Changelog from my journey
           </h1>
           <p className="max-w-2xl text-sm leading-relaxed text-fg-dim md:text-base">
-            I&apos;ve been working at Hexagon Digital Services for the past 2.5 years.
-            Here&apos;s a timeline of my journey across multiple startups and projects.
+            Here&apos;s a timeline of my journey building web platforms, smart contracts,
+            and games.
           </p>
 
           {/* Legend */}

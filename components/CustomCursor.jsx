@@ -38,6 +38,7 @@ export const CustomCursor = () => {
           target.tagName === "BUTTON" ||
           target.closest("a") ||
           target.closest("button") ||
+          target.closest(".cursor-pointer") ||
           window.getComputedStyle(target).cursor === "pointer";
 
         setIsHovering(isInteractive);
