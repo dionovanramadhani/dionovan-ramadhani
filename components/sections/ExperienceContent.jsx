@@ -287,7 +287,7 @@ const KeyAchievements = ({ containerRef }) => {
 
               <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {ACHIEVEMENTS.map((a) => {
-                  const Wrapper = a.link ? motion(Link) : motion.div;
+                  const Wrapper = a.link ? motion.create(Link) : motion.div;
                   const wrapperProps = a.link
                     ? {
                         href: a.link,

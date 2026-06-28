@@ -116,7 +116,7 @@ export const HomeContent = ({ onSelect }) => {
           <span className="text-accent-blue">PostgreSQL</span>,{" "}
           <span className="text-accent-green">MongoDB</span>), modern frontends (
           <span className="text-accent-blue">React</span>,{" "}
-          <span className="text-orange-400">Next.js</span>), and{" "}
+          <span className="text-slate-100">Next.js</span>), and{" "}
           <span className="text-blue-300">smart contracts</span> (
           <span className="text-accent-yellow">Solidity</span>) — with a strong
           background in game development.
