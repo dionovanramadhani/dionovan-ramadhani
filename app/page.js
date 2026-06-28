@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Home,
@@ -53,10 +53,7 @@ const useTypewriter = (
 
     if (phase === "typing") {
       if (text.length < current.length) {
-        timer = setTimeout(
-          () => setText(current.slice(0, text.length + 1)),
-          typeSpeed,
-        );
+        timer = setTimeout(() => setText(current.slice(0, text.length + 1)), typeSpeed);
       } else {
         timer = setTimeout(() => setPhase("holding"), 0);
       }
@@ -64,10 +61,7 @@ const useTypewriter = (
       timer = setTimeout(() => setPhase("erasing"), holdTime);
     } else if (phase === "erasing") {
       if (text.length > 0) {
-        timer = setTimeout(
-          () => setText(current.slice(0, text.length - 1)),
-          eraseSpeed,
-        );
+        timer = setTimeout(() => setText(current.slice(0, text.length - 1)), eraseSpeed);
       } else {
         timer = setTimeout(() => setPhase("gap"), 0);
       }
@@ -209,11 +203,7 @@ const WindowChrome = () => {
 /*  Home page \u2014 the content that lives inside the embedded main window         */
 /* -------------------------------------------------------------------------- */
 
-const ROLES = [
-  "Frontend Developer",
-  "Backend Developer",
-  "Blockchain Developer",
-];
+const ROLES = ["Frontend Developer", "Backend Developer", "Blockchain Developer"];
 
 const HomeContent = () => {
   const typed = useTypewriter(ROLES);
@@ -299,9 +289,9 @@ const HomeContent = () => {
           transition={{ duration: 0.6, delay: 0.45 }}
           className="max-w-2xl text-sm leading-relaxed text-fg-dim md:text-base"
         >
-          <span className="text-fg-muted">{">"}</span> I design and ship
-          end-to-end products — from pixel-perfect interfaces to scalable
-          services and on-chain logic. Currently exploring the intersection of{" "}
+          <span className="text-fg-muted">{">"}</span> I design and ship end-to-end
+          products — from pixel-perfect interfaces to scalable services and on-chain
+          logic. Currently exploring the intersection of{" "}
           <span className="text-accent-blue">AI</span>,{" "}
           <span className="text-accent-yellow">DX</span> and{" "}
           <span className="text-accent-green">web3</span>.
@@ -513,9 +503,7 @@ const ProjectCard = ({ project }) => {
           <h3 className="text-base font-semibold tracking-tight text-fg">
             {project.title}
           </h3>
-          <p className="text-xs leading-relaxed text-fg-dim">
-            {project.description}
-          </p>
+          <p className="text-xs leading-relaxed text-fg-dim">{project.description}</p>
         </div>
 
         {/* Tags */}
@@ -780,34 +768,74 @@ const TimelineItem = ({ item }) => {
   const tone = CATEGORY_TONE[item.category];
   const Icon = item.icon;
 
+  const itemRef = useRef(null);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const container = document.querySelector(".overflow-y-auto");
+    if (!container) return;
+
+    const handleScroll = () => {
+      if (!itemRef.current) return;
+      const containerRect = container.getBoundingClientRect();
+      const itemRect = itemRef.current.getBoundingClientRect();
+
+      const isAtBottom =
+        container.scrollHeight - container.scrollTop <= container.clientHeight + 12;
+      if (isAtBottom) {
+        setProgress(1);
+        return;
+      }
+
+      const triggerY = containerRect.top + 350;
+      const lineStart = itemRect.top;
+      const lineEnd = itemRect.bottom;
+
+      if (triggerY < lineStart) {
+        setProgress(0);
+      } else if (triggerY > lineEnd) {
+        setProgress(1);
+      } else {
+        const p = (triggerY - lineStart) / (lineEnd - lineStart);
+        setProgress(p);
+      }
+    };
+
+    container.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <motion.div
-      variants={cardVariants}
-      className="min-h-[480px] md:min-h-[560px]"
-    >
+    <motion.div ref={itemRef} variants={cardVariants} className="pb-48 md:pb-72">
       <div className="bg-bg-normal pt-4 md:pt-6">
         <div className="relative grid grid-cols-[7rem_auto_1fr] gap-x-5 md:grid-cols-[10rem_auto_1fr] md:gap-x-8">
           {/* Left — period */}
-          <div className="sticky pt-2 text-right">
-            <div className="text-xs text-fg-muted md:text-sm">
-              {item.period}
-            </div>
+          <div className="sticky top-4 self-start pt-2 text-right">
+            <div className="text-xs text-fg-muted md:text-sm">{item.period}</div>
           </div>
 
           {/* Center — node + line */}
-          <div className="sticky top-0 flex w-10 justify-center md:w-12">
-            <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[250%] -bottom-[20%] w-px bg-bg-elev" />
+          <div className="relative flex w-10 justify-center md:w-12">
+            <div className="absolute left-1/2 top-0 -translate-x-1/2 -bottom-56 md:-bottom-80 w-px bg-bg-elev overflow-hidden">
+              <div
+                className={[
+                  "w-full origin-top transition-transform duration-75",
+                  tone.bg,
+                ].join(" ")}
+                style={{ transform: `scaleY(${progress})`, height: "100%" }}
+              />
+            </div>
             <div
               className={[
-                "relative z-10 mt-1 flex h-9 w-9 items-center justify-center rounded-full ring-2 md:h-10 md:w-10",
+                "sticky top-4 z-10 mt-0 flex h-9 w-9 items-center justify-center rounded-full ring-2 md:h-10 md:w-10",
                 "bg-bg-hard",
                 tone.ring,
               ].join(" ")}
             >
               <Icon
-                className={["h-4 w-4 md:h-[18px] md:w-[18px]", tone.text].join(
-                  " ",
-                )}
+                className={["h-4 w-4 md:h-[18px] md:w-[18px]", tone.text].join(" ")}
                 strokeWidth={1.75}
               />
               <span
@@ -830,10 +858,7 @@ const TimelineItem = ({ item }) => {
                     tone.ring,
                   ].join(" ")}
                 >
-                  <Icon
-                    className={["h-4 w-4", tone.text].join(" ")}
-                    strokeWidth={2}
-                  />
+                  <Icon className={["h-4 w-4", tone.text].join(" ")} strokeWidth={2} />
                 </div>
                 <div className="min-w-0 flex-1">
                   <h3 className="text-sm font-semibold tracking-tight text-fg md:text-base">
@@ -845,12 +870,8 @@ const TimelineItem = ({ item }) => {
                       </>
                     )}
                   </h3>
-                  <p className="text-xs text-fg-dim md:text-sm">
-                    {item.description}
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-fg-muted">
-                    {item.meta}
-                  </p>
+                  <p className="text-xs text-fg-dim md:text-sm">{item.description}</p>
+                  <p className="mt-0.5 text-[11px] text-fg-muted">{item.meta}</p>
                 </div>
               </div>
 
@@ -896,24 +917,64 @@ const KeyAchievements = () => {
     yellow: "text-accent-yellow",
     purple: "text-gruv-purple",
   };
+
+  const itemRef = useRef(null);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const container = document.querySelector(".overflow-y-auto");
+    if (!container) return;
+
+    const handleScroll = () => {
+      if (!itemRef.current) return;
+      const containerRect = container.getBoundingClientRect();
+      const itemRect = itemRef.current.getBoundingClientRect();
+
+      const isAtBottom =
+        container.scrollHeight - container.scrollTop <= container.clientHeight + 12;
+      if (isAtBottom) {
+        setProgress(1);
+        return;
+      }
+
+      const triggerY = containerRect.top + 350;
+      const lineStart = itemRect.top - 24;
+      const lineEnd = itemRect.top + 24;
+
+      if (triggerY < lineStart) {
+        setProgress(0);
+      } else if (triggerY > lineEnd) {
+        setProgress(1);
+      } else {
+        const p = (triggerY - lineStart) / (lineEnd - lineStart);
+        setProgress(p);
+      }
+    };
+
+    container.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <motion.div
-      variants={cardVariants}
-      className="min-h-[480px] md:min-h-[560px]"
-    >
-      <div className="sticky top-0 bg-bg-normal pt-4 md:pt-6">
-        <div className="grid grid-cols-[7rem_auto_1fr] gap-x-5 md:grid-cols-[10rem_auto_1fr] md:gap-x-8">
+    <motion.div ref={itemRef} variants={cardVariants} className="pb-48 md:pb-72">
+      <div className="bg-bg-normal pt-4 md:pt-6">
+        <div className="relative grid grid-cols-[7rem_auto_1fr] gap-x-5 md:grid-cols-[10rem_auto_1fr] md:gap-x-8">
           {/* Left */}
-          <div className="pt-2 text-right">
-            <div className="text-xs text-fg-muted md:text-sm">
-              Key Achievements
-            </div>
+          <div className="sticky top-2 self-start pt-2 text-right">
+            <div className="text-xs text-fg-muted md:text-sm">Key Achievements</div>
           </div>
 
           {/* Node */}
           <div className="relative flex w-10 justify-center md:w-12">
-            <div className="absolute left-1/2 top-0 -translate-x-1/2 h-full w-px bg-bg-elev" />
-            <div className="relative z-10 mt-1 flex h-9 w-9 items-center justify-center rounded-full bg-bg-hard ring-2 ring-accent-green/40 md:h-10 md:w-10">
+            <div className="absolute left-1/2 -top-4 md:-top-6 -translate-x-1/2 h-[38px] md:h-[48px] w-px bg-bg-elev overflow-hidden">
+              <div
+                className="w-full origin-top transition-transform duration-75 bg-accent-green"
+                style={{ transform: `scaleY(${progress})`, height: "100%" }}
+              />
+            </div>
+            <div className="sticky top-2 z-10 mt-1 flex h-9 w-9 items-center justify-center rounded-full bg-bg-hard ring-2 ring-accent-green/40 md:h-10 md:w-10">
               <Trophy
                 className="h-4 w-4 text-accent-green md:h-[18px] md:w-[18px]"
                 strokeWidth={1.75}
@@ -927,10 +988,7 @@ const KeyAchievements = () => {
             <div className="rounded-xl border border-bg-elev/60 bg-bg-normal/70 p-5">
               <div className="mb-4 flex items-start gap-3">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-green/10 ring-1 ring-accent-green/40">
-                  <Flame
-                    className="h-4 w-4 text-accent-green"
-                    strokeWidth={2}
-                  />
+                  <Flame className="h-4 w-4 text-accent-green" strokeWidth={2} />
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold tracking-tight text-fg md:text-base">
@@ -959,9 +1017,7 @@ const KeyAchievements = () => {
                     <div className="mt-1 text-2xl font-semibold tracking-tight text-fg">
                       {a.value}
                     </div>
-                    <div className="mt-0.5 text-[11px] text-fg-muted">
-                      {a.sub}
-                    </div>
+                    <div className="mt-0.5 text-[11px] text-fg-muted">{a.sub}</div>
                   </div>
                 ))}
               </div>
@@ -1013,18 +1069,15 @@ const ExperienceContent = () => {
             Changelog from my journey
           </h1>
           <p className="max-w-2xl text-sm leading-relaxed text-fg-dim md:text-base">
-            I&apos;ve been working at Hexagon Digital Services for the past 2.5
-            years. Here&apos;s a timeline of my journey across multiple startups
-            and projects.
+            I&apos;ve been working at Hexagon Digital Services for the past 2.5 years.
+            Here&apos;s a timeline of my journey across multiple startups and projects.
           </p>
 
           {/* Legend */}
           <div className="mt-1 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-fg-dim md:text-xs">
             {Object.entries(CATEGORY_TONE).map(([key, tone]) => (
               <span key={key} className="inline-flex items-center gap-1.5">
-                <span
-                  className={["h-1.5 w-1.5 rounded-full", tone.bg].join(" ")}
-                />
+                <span className={["h-1.5 w-1.5 rounded-full", tone.bg].join(" ")} />
                 {tone.label}
               </span>
             ))}
@@ -1166,9 +1219,7 @@ const ToolCard = ({ tool }) => {
         <div className="truncate text-sm font-semibold tracking-tight text-fg">
           {tool.name}
         </div>
-        <div className="truncate text-[11px] text-fg-muted">
-          {tool.category}
-        </div>
+        <div className="truncate text-[11px] text-fg-muted">{tool.category}</div>
       </div>
     </motion.div>
   );
@@ -1392,9 +1443,7 @@ const QuickCard = ({ Icon, label, value, href }) => {
         />
       </div>
       <div className="min-w-0">
-        <div className="text-[11px] uppercase tracking-wider text-fg-muted">
-          {label}
-        </div>
+        <div className="text-[11px] uppercase tracking-wider text-fg-muted">{label}</div>
         <div className="truncate text-sm text-fg">{value}</div>
       </div>
     </a>
@@ -1455,8 +1504,7 @@ const ContactContent = () => {
             Get in Touch
           </h1>
           <p className="max-w-xl text-sm leading-relaxed text-fg-muted md:text-base">
-            Have a project in mind or just want to say hi? I&apos;d love to hear
-            from you.
+            Have a project in mind or just want to say hi? I&apos;d love to hear from you.
           </p>
         </motion.div>
 
@@ -1547,8 +1595,7 @@ const ContactContent = () => {
           transition={{ duration: 0.45, delay: 0.28 }}
           className="text-center text-xs text-fg-muted"
         >
-          Prefer to schedule a call?{" "}
-          <span className="text-fg-dim">9005-123-456</span>
+          Prefer to schedule a call? <span className="text-fg-dim">9005-123-456</span>
         </motion.div>
       </div>
     </div>
@@ -1570,8 +1617,8 @@ const ComingSoon = ({ view }) => {
         {view}
       </h2>
       <p className="text-sm text-fg-dim">
-        <span className="text-fg-muted">{">"}</span> this section is being
-        shipped soon. Check back in a bit.
+        <span className="text-fg-muted">{">"}</span> this section is being shipped soon.
+        Check back in a bit.
       </p>
     </div>
   );
