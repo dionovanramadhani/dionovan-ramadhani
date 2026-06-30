@@ -1,8 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { navItems, ROLES, socials } from "../lib/data";
-import Image from "next/image";
-import { Logo } from "../lib/images/index";
 import { useTypewriter } from "@/hooks/use-typewriter";
 import { Download } from "lucide-react";
 
@@ -41,19 +39,11 @@ export const Sidebar = ({ activeView, onSelect }) => {
     >
       {/* Identity */}
       <div className="flex flex-col gap-8">
-        <motion.div variants={childVariants} className="flex items-center gap-3">
-          <motion.div
-            whileHover={{ scale: 1.05, rotate: 10 }}
-            className="flex h-8 w-8 items-center justify-center cursor-pointer"
-          >
-            <Image src={Logo} alt="logo-icon" loading="eager" className="w-full" />
-          </motion.div>
-          <div className="leading-tight">
-            <div className="text-[15px] font-semibold tracking-tight text-fg">
-              Dionovan Ramadhani
-            </div>
-            <div className="text-xs text-fg-muted">{type}</div>
+        <motion.div variants={childVariants} className="leading-tight">
+          <div className="text-[15px] font-semibold tracking-tight text-fg">
+            Dionovan Ramadhani
           </div>
+          <div className="text-xs text-fg-muted">Full-Stack Developer</div>
         </motion.div>
 
         {/* Nav */}
@@ -62,12 +52,12 @@ export const Sidebar = ({ activeView, onSelect }) => {
             const Icon = item.icon;
             const isActive = activeView === item.id;
             return (
-              <motion.button
+              <motion.a
                 key={item.id}
                 variants={childVariants}
-                onClick={() => onSelect(item.id)}
+                href={`#${item.id}`}
                 className={[
-                  "group relative flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm transition-colors outline-none",
+                  "group relative flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm transition-colors outline-none cursor-pointer",
                   isActive ? "text-fg" : "text-fg-dim hover:text-fg",
                 ].join(" ")}
               >
@@ -88,7 +78,7 @@ export const Sidebar = ({ activeView, onSelect }) => {
                   />
                   <span>{item.label}</span>
                 </span>
-              </motion.button>
+              </motion.a>
             );
           })}
         </nav>

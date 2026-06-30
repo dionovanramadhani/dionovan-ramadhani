@@ -10,6 +10,7 @@ import { AboutContent } from "./sections/AboutContent";
 import { ContactContent } from "./sections/ContactContent";
 import { PROJECTS } from "../lib/data";
 import { TabNavFooter } from "./TabNavFooter";
+import Image from "next/image";
 
 export const MainWindow = ({ activeView, onSelect }) => {
   const containerRef = useRef(null);
@@ -31,13 +32,7 @@ export const MainWindow = ({ activeView, onSelect }) => {
       case "skills":
         return <SkillContent />;
       case "about":
-        return (
-          <AboutContent
-            onClickGetInTouch={() => {
-              onSelect("contact");
-            }}
-          />
-        );
+        return <AboutContent />;
       case "contact":
         return <ContactContent />;
       case "home":
@@ -83,8 +78,8 @@ export const MainWindow = ({ activeView, onSelect }) => {
             aria-hidden
             className="pointer-events-none fixed -z-50 h-0 w-0 overflow-hidden opacity-0"
           >
-            {PROJECTS.map((p) => (
-              <img key={p.image} src={p.image} alt="" width={1} height={1} />
+            {PROJECTS.filter((p) => p.image).map((p) => (
+              <Image key={p.title} src={p.image} alt="" width={1} height={1} />
             ))}
           </div>
         </div>

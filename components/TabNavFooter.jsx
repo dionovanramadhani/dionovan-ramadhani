@@ -22,10 +22,10 @@ export const TabNavFooter = ({ activeView, onSelect }) => {
     >
       {/* Previous */}
       {prev ? (
-        <motion.button
+        <motion.a
           whileHover={{ x: -3, scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
-          onClick={() => onSelect?.(prev.id)}
+          href={`#${prev.id}`}
           className="group flex items-center gap-2 rounded-md border border-bg-elev/60 px-4 py-2 text-sm text-fg-dim transition-colors hover:border-accent-green/50 hover:text-fg cursor-pointer"
         >
           <ChevronLeft
@@ -34,7 +34,7 @@ export const TabNavFooter = ({ activeView, onSelect }) => {
           />
           <span className="hidden sm:inline text-fg-muted text-xs mr-1">prev</span>
           <span className="font-medium">{prev.label}</span>
-        </motion.button>
+        </motion.a>
       ) : (
         <div />
       )}
@@ -42,9 +42,9 @@ export const TabNavFooter = ({ activeView, onSelect }) => {
       {/* Current position dots */}
       <div className="flex items-center gap-1.5">
         {navItems.map((item, i) => (
-          <motion.button
+          <motion.a
             key={item.id}
-            onClick={() => onSelect?.(item.id)}
+            href={`#${item.id}`}
             whileHover={{ scale: 1.3 }}
             whileTap={{ scale: 0.9 }}
             className={[
@@ -60,10 +60,10 @@ export const TabNavFooter = ({ activeView, onSelect }) => {
 
       {/* Next */}
       {next ? (
-        <motion.button
+        <motion.a
           whileHover={{ x: 3, scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
-          onClick={() => onSelect?.(next.id)}
+          href={`#${next.id}`}
           className="group flex items-center gap-2 rounded-md border border-bg-elev/60 px-4 py-2 text-sm text-fg-dim transition-colors hover:border-accent-green/50 hover:text-fg cursor-pointer"
         >
           <span className="font-medium">{next.label}</span>
@@ -72,7 +72,7 @@ export const TabNavFooter = ({ activeView, onSelect }) => {
             className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
             strokeWidth={2}
           />
-        </motion.button>
+        </motion.a>
       ) : (
         <div />
       )}

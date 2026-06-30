@@ -1,25 +1,14 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, Home, FolderGit2, Briefcase, Code2, User } from "lucide-react";
-import Image from "next/image";
 import { navItems } from "../lib/data";
-import { Logo } from "../lib/images";
 
 export const MobileNav = ({ activeView, onSelect }) => {
   return (
     <>
       {/* Top Header Bar */}
       <header className="fixed top-0 left-0 right-0 z-30 h-14 bg-bg-hard/80 backdrop-blur-md border-b border-bg-elev/40 px-4 flex items-center justify-between md:hidden">
-        <div className="flex items-center gap-3">
-          <div className="h-7 w-7 flex items-center justify-center">
-            <Image
-              src={Logo}
-              alt="logo"
-              width={26}
-              height={26}
-              loading="eager"
-            />
-          </div>
+        <div className="flex items-center">
           <span className="text-[13.5px] font-semibold tracking-tight text-fg font-mono">
             Dionovan Ramadhani
           </span>
@@ -39,9 +28,9 @@ export const MobileNav = ({ activeView, onSelect }) => {
           const Icon = item.icon;
           const isActive = activeView === item.id;
           return (
-            <button
+            <a
               key={item.id}
-              onClick={() => onSelect(item.id)}
+              href={`#${item.id}`}
               className="relative flex flex-col items-center justify-center w-11 h-11 rounded-xl transition-colors cursor-pointer outline-none select-none"
             >
               {isActive && (
@@ -66,7 +55,7 @@ export const MobileNav = ({ activeView, onSelect }) => {
               >
                 {item.label}
               </span>
-            </button>
+            </a>
           );
         })}
       </nav>

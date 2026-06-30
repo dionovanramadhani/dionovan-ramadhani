@@ -118,7 +118,7 @@ export const ContactContent = () => {
           <QuickCard
             Icon={Linkedin}
             label="LinkedIn"
-            value="dionovan-ramadhani"
+            value="Dionovan Ramadhani"
             href="https://www.linkedin.com/in/dionovan-ramadhani/"
           />
           <QuickCard

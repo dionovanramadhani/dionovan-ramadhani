@@ -56,6 +56,16 @@
     margin: 0;
     min-height: 100vh;
   }
+
+  /* Keyboard Focus Rings matching Gruvbox Accent Green (#b8bb26) */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 2px solid rgba(184, 187, 38, 0.75) !important;
+    outline-offset: 2px !important;
+  }
 }
 
 /* Custom thin scrollbar for the embedded main window */

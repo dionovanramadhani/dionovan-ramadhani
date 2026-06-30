@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { useTypewriter } from "../../hooks/use-typewriter";
 import { ROLES } from "../../lib/data";
 import { ArrowRight, Mail } from "lucide-react";
+import Image from "next/image";
+import { Logo } from "../../lib/images";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -62,14 +64,22 @@ export const HomeContent = ({ onSelect }) => {
           <span>available for work</span>
         </motion.div>
 
-        {/* Intro */}
-        <motion.h1
-          variants={childVariants}
-          className="text-4xl font-semibold leading-[1.05] tracking-tight text-fg md:text-6xl"
-        >
-          <span className="text-fg-dim">Hi, I&apos;m</span>{" "}
-          <span className="text-accent-green">Dionovan Ramadhani</span>
-        </motion.h1>
+        <motion.div variants={childVariants} className="flex items-start gap-4 md:gap-6">
+          <div className="relative h-12 w-12 md:h-28 md:w-28 shrink-0">
+            <Image
+              src={Logo}
+              alt="Dionovan Logo"
+              width={64}
+              height={64}
+              className="h-full w-full object-contain"
+              priority
+            />
+          </div>
+          <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight text-fg md:text-6xl">
+            <span className="text-fg-dim">Hi, I&apos;m</span>{" "}
+            <span className="text-accent-green">Dionovan Ramadhani</span>
+          </h1>
+        </motion.div>
 
         {/* Typewriter role */}
         <motion.div
@@ -99,27 +109,18 @@ export const HomeContent = ({ onSelect }) => {
             </span>
           </span>
         </motion.div>
-
         {/* Subtle prompt line */}
         <motion.p
           variants={childVariants}
           className="w-full text-sm leading-relaxed text-fg-dim md:text-base"
         >
-          <span className="text-fg-muted">{">"}</span>{" "}
-          <span className="text-accent-blue">Full-Stack Web</span> &{" "}
-          <span className="text-accent-green">Blockchain Developer</span> with 2
-          years of experience in{" "}
-          <span className="text-accent-yellow">JavaScript</span> /{" "}
-          <span className="text-accent-blue">TypeScript</span>. Builds scalable
-          backends (
-          <span className="text-accent-green">Node.js</span>,{" "}
-          <span className="text-accent-blue">PostgreSQL</span>,{" "}
-          <span className="text-accent-green">MongoDB</span>), modern frontends (
-          <span className="text-accent-blue">React</span>,{" "}
-          <span className="text-slate-100">Next.js</span>), and{" "}
-          <span className="text-blue-300">smart contracts</span> (
-          <span className="text-accent-yellow">Solidity</span>) — with a strong
-          background in game development.
+          <span className="text-fg-muted">{">"}</span> I am a{" "}
+          <span className="text-accent-blue">Full-Stack & Blockchain Developer</span>{" "}
+          specializing in high-performance decentralized applications. Combining a
+          background in <span className="text-accent-green">game programming</span>, I
+          bridge <span className="text-accent-yellow">modern frontends</span> with{" "}
+          <span className="text-accent-blue">scalable backends</span> and secure{" "}
+          <span className="text-accent-green">smart contracts</span>.
         </motion.p>
 
         {/* CTA Buttons */}
@@ -127,10 +128,10 @@ export const HomeContent = ({ onSelect }) => {
           variants={childVariants}
           className="flex flex-wrap items-center gap-3 pt-2"
         >
-          <motion.button
+          <motion.a
             whileHover={{ scale: 1.04, x: 2 }}
             whileTap={{ scale: 0.97 }}
-            onClick={() => onSelect?.("projects")}
+            href="#projects"
             className="group flex items-center gap-2 rounded-md bg-fg px-5 py-2.5 text-sm font-semibold text-bg-hard transition-colors hover:bg-accent-green cursor-pointer"
           >
             View My Work
@@ -138,17 +139,17 @@ export const HomeContent = ({ onSelect }) => {
               className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
               strokeWidth={2.25}
             />
-          </motion.button>
+          </motion.a>
 
-          <motion.button
+          <motion.a
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
-            onClick={() => onSelect?.("contact")}
+            href="#contact"
             className="flex items-center gap-2 rounded-md border border-bg-elev/80 px-5 py-2.5 text-sm font-medium text-fg-dim transition-colors hover:border-accent-green/60 hover:text-fg cursor-pointer"
           >
             <Mail className="h-4 w-4" strokeWidth={1.75} />
             Get in Touch
-          </motion.button>
+          </motion.a>
         </motion.div>
       </div>
     </motion.div>

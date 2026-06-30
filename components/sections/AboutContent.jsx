@@ -57,39 +57,6 @@ export const AboutContent = ({ onClickGetInTouch }) => {
           ))}
         </motion.div>
 
-        {/* Tech stack badges */}
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={{
-            hidden: { opacity: 0 },
-            show: {
-              opacity: 1,
-              transition: { staggerChildren: 0.04, delayChildren: 0.2 },
-            },
-          }}
-          className="-mt-4 flex flex-wrap gap-2"
-        >
-          {ABOUT_STACK.map((s) => (
-            <motion.span
-              key={s}
-              variants={{
-                hidden: { opacity: 0, scale: 0.8 },
-                show: { opacity: 1, scale: 1 },
-              }}
-              whileHover={{
-                scale: 1.06,
-                rotate: 1,
-                borderColor: "rgba(142,192,124,0.4)",
-              }}
-              transition={{ type: "spring", stiffness: 400, damping: 15 }}
-              className="inline-flex items-center rounded-full border border-bg-elev/70 bg-bg-hard px-3 py-1 text-[12px] text-fg-dim cursor-default transition-all duration-200 hover:text-fg"
-            >
-              {s}
-            </motion.span>
-          ))}
-        </motion.div>
-
         {/* Content sections */}
         <div className="mt-2 flex flex-col gap-10">
           {ABOUT_SECTIONS.map((s, i) => (
@@ -122,14 +89,14 @@ export const AboutContent = ({ onClickGetInTouch }) => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-6 flex flex-wrap items-center gap-3"
         >
-          <motion.div
+          <motion.a
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
+            href="#contact"
             className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 text-sm font-medium text-bg-hard transition-colors hover:bg-accent-green cursor-pointer"
-            onClick={onClickGetInTouch}
           >
             Get in Touch
-          </motion.div>
+          </motion.a>
           <motion.a
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
