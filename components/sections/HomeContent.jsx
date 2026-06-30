@@ -71,7 +71,7 @@ export const HomeContent = ({ onSelect }) => {
               alt="Dionovan Logo"
               width={64}
               height={64}
-              className="h-full w-full object-contain"
+              className="h-full w-full object-contain rounded-sm sm:rounded-xl"
               priority
             />
           </div>

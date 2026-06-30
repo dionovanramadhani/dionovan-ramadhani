@@ -30,7 +30,7 @@ const bulletHoverVariants = {
   hover: { scale: 1.3, transition: { type: "spring", stiffness: 300, damping: 10 } },
 };
 
-const TimelineItem = ({ item, containerRef }) => {
+const TimelineItem = ({ item, containerRef, isLast }) => {
   const tone = CATEGORY_TONE[item.category];
   const Icon = item.icon;
   const itemRef = useRef(null);
@@ -62,24 +62,27 @@ const TimelineItem = ({ item, containerRef }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
-      className="pb-10 md:pb-48"
+      className="pb-8 lg:pb-20"
     >
       <div className="bg-bg-normal pt-4 md:pt-6">
-        <div className="relative grid grid-cols-1 gap-y-4 md:grid-cols-[10rem_auto_1fr] md:gap-x-8">
+        <div className="relative grid grid-cols-1 gap-y-4 lg:grid-cols-[10rem_auto_1fr] lg:gap-x-8">
           {/* Left — period */}
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.1 }}
-            className="sticky top-4 self-start pt-2 text-right hidden md:block"
+            className="sticky top-4 self-start pt-2 text-right hidden lg:block"
           >
             <div className="text-xs text-fg-muted md:text-sm">{item.period}</div>
           </motion.div>
 
           {/* Center — node + line */}
-          <div className="relative hidden md:flex w-12 justify-center">
-            <div className="absolute left-1/2 top-0 -translate-x-1/2 -bottom-56 md:-bottom-80 w-px bg-bg-elev overflow-hidden">
+          <div className="relative hidden lg:flex w-12 justify-center">
+            <div className={[
+              "absolute left-1/2 top-0 -translate-x-1/2 w-px bg-bg-elev overflow-hidden",
+              isLast ? "-bottom-8 lg:-bottom-20" : "-bottom-32 lg:-bottom-40",
+            ].join(" ")}>
               <motion.div
                 className={["w-full origin-top h-full", tone.bg].join(" ")}
                 style={{ scaleY: scrollYProgress }}
@@ -142,7 +145,7 @@ const TimelineItem = ({ item, containerRef }) => {
                   />
                 </motion.div>
                 <div className="min-w-0 flex-1">
-                  <span className="text-[11px] font-mono text-fg-muted block md:hidden mb-1">
+                  <span className="text-[11px] font-mono text-fg-muted block lg:hidden mb-1">
                     {item.period}
                   </span>
                   <h3 className="text-sm font-semibold tracking-tight text-fg md:text-base">
@@ -220,24 +223,24 @@ const KeyAchievements = ({ containerRef }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
-      className="pb-10 md:pb-48"
+      className="pb-8 lg:pb-20"
     >
       <div className="bg-bg-normal pt-4 md:pt-6">
-        <div className="relative grid grid-cols-1 gap-y-4 md:grid-cols-[10rem_auto_1fr] md:gap-x-8">
+        <div className="relative grid grid-cols-1 gap-y-4 lg:grid-cols-[10rem_auto_1fr] lg:gap-x-8">
           {/* Left */}
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.1 }}
-            className="sticky top-2 self-start pt-2 text-right hidden md:block"
+            className="sticky top-2 self-start pt-2 text-right hidden lg:block"
           >
             <div className="text-xs text-fg-muted md:text-sm">Key Achievements</div>
           </motion.div>
 
           {/* Node */}
-          <div className="relative hidden md:flex w-12 justify-center">
-            <div className="absolute left-1/2 -top-4 md:-top-6 -translate-x-1/2 h-[38px] md:h-[48px] w-px bg-bg-elev overflow-hidden">
+          <div className="relative hidden lg:flex w-12 justify-center">
+            <div className="absolute left-1/2 -top-4 lg:-top-6 -translate-x-1/2 h-[38px] lg:h-[48px] w-px bg-bg-elev overflow-hidden">
               <motion.div
                 className="w-full origin-top h-full bg-accent-green"
                 style={{ scaleY: scrollYProgress }}
@@ -285,7 +288,7 @@ const KeyAchievements = ({ containerRef }) => {
                 </div>
               </div>
 
-              <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="mb-5 grid grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-3">
                 {ACHIEVEMENTS.map((a) => {
                   const Wrapper = a.link ? motion.create(Link) : motion.div;
                   const wrapperProps = a.link
@@ -399,8 +402,13 @@ export const ExperienceContent = () => {
         {/* Timeline */}
         <div className="relative mt-2">
           {mounted &&
-            TIMELINE.map((item) => (
-              <TimelineItem key={item.period} item={item} containerRef={containerRef} />
+            TIMELINE.map((item, index) => (
+              <TimelineItem
+                key={item.period}
+                item={item}
+                containerRef={containerRef}
+                isLast={index === TIMELINE.length - 1}
+              />
             ))}
           {/* Final node: Key Achievements */}
           {mounted && <KeyAchievements containerRef={containerRef} />}
