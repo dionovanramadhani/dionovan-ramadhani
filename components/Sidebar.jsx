@@ -118,7 +118,7 @@ export const Sidebar = ({ activeView, onSelect }) => {
           variants={childVariants}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          href="/cv/Dionovan Ramadhani-resume_25_04_2026-3.pdf"
+          href="/cv/dionovan-ramadhani-resume.pdf"
           download="Dionovan Ramadhani - Resume.pdf"
           className="mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-fg px-3 py-2 text-xs font-semibold text-bg-hard transition-colors hover:bg-accent-green cursor-pointer font-mono"
         >

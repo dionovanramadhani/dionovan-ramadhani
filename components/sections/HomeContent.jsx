@@ -76,7 +76,7 @@ export const HomeContent = ({ onSelect }) => {
             />
           </div>
           <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight text-fg md:text-6xl">
-            <span className="text-fg-dim">Hi, I&apos;m</span>{" "}
+            <span className="text-fg-dim">Hi, I&apos;m</span> <br />
             <span className="text-accent-green">Dionovan Ramadhani</span>
           </h1>
         </motion.div>
